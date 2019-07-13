@@ -1,0 +1,195 @@
+﻿@{
+    ViewBag.Title = "About";
+}
+<h2>@ViewBag.Title</h2>
+
+<div class="accordion" id="accordionExample">
+
+    <div class="card bg-dark">
+        <div class="card-header" id="headingAboutWebsite">
+            <h2 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseAboutWebsite" aria-expanded="false" aria-controls="collapseAboutWebsite">
+                    About Website
+                </button>
+            </h2>
+        </div>
+        <div id="collapseAboutWebsite" class="collapse show" aria-labelledby="headingAboutWebsite" data-parent="#accordionExample">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-4">
+                        <img src="../Images/SuperJ_logo.jpg" width="130" height="130" class="d-inline-block align-top rounded mt-1 mb-2" alt="">
+                    </div>
+                    <div class="col-12 col-sm-12 col-md-8">
+                        <a class="navbar-brand rounded" href="@Url.Action("Index", "Home")" style="background-color:rgb(48,59,164)">
+                            &nbsp;
+                            <img src="../Images/SuperJ_logo.jpg" width="30" height="30" class="d-inline-block align-top img-fluid rounded mt-1" alt="">
+                            <span style="color:white; font-family: 'Jura', sans-serif; text-shadow: 2px 2px 4px #000000;">Jack's Marvel</span>&nbsp;&nbsp;
+                        </a> <br /><br />
+                        &nbsp; <code> Version: 1.0.0.0 | Published on: 31 Jan 2019 | Development Period: 15 Days (16-31 Jan 2019)  </code>
+                        <br /><br />
+                              <p>Get all marvellous Comic Super Heroes and Villians from all universes. Explore Powerstats, Biography, Appearance, Work, Connections and Images of all your favourite characters. In addition, the website provides functionalities like user management, favourites, login with Facebook, providing your feedback functionalities. Don't forget the like and share the website using the facebook like and share buttons provided on the bottom of the website. Enjoy!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card bg-dark">
+        <div class="card-header" id="headingAboutDeveloper">
+            <h2 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseAboutDeveloper" aria-expanded="false" aria-controls="collapseAboutDeveloper">
+                    About Developer
+                </button>
+            </h2>
+        </div>
+        <div id="collapseAboutDeveloper" class="collapse" aria-labelledby="headingAboutDeveloper" data-parent="#accordionExample">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-sm-4">
+                        <img src="../Images/JackPhoto.jpg" width="130" height="130" class="d-inline-block align-top img-fluid rounded mt-1" alt="">
+                    </div>
+                    <div class="col-12 col-sm-8">
+                        <h2>Jagdish Chopde</h2>
+                        <small class="text-secondary">(a passionate designer and developer)</small><br /><br />
+                        <address>
+                            <strong>Email:</strong>   <a href="mailto:jagdishchopde@outlook.com">jagdishchopde@outlook.com</a><br />
+                            <strong>Website:</strong> <a href="https://developer.marvel.com" target="_blank">http://jagdishchopde2010.weebly.com/</a>
+                        </address>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card bg-dark">
+        <div class="card-header" id="headingOne">
+            <h2 class="mb-0">
+                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    Technologies Used
+                </button>
+            </h2>
+        </div>
+
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+            <div class="card-body">
+                <table class="table">
+                    <tbody class="font-weight-light">
+                        <tr>
+                            <td>ASP .Net MVC</td>
+                            <td><a href="https://www.asp.net/mvc" target="_blank">https://www.asp.net/mvc</a></td>
+                        </tr>
+                        <tr>
+                            <td>C#</td>
+                            <td><a href="https://docs.microsoft.com/en-us/dotnet/csharp/getting-started/introduction-to-the-csharp-language-and-the-net-framework" target="_blank">C# Guide</a></td>
+                        </tr>
+                        <tr>
+                            <td>SQL</td>
+                            <td><a href="https://www.w3schools.com/sql/" target="_blank">SQL Tutorial</a></td>
+                        </tr>
+                        <tr>
+                            <td>Boostrap</td>
+                            <td><a href="https://getbootstrap.com/" target="_blank">https://getbootstrap.com/</a></td>
+                        </tr>
+                        <tr>
+                            <td>jQuery, Javascript</td>
+                            <td><a href="https://jquery.com/" target="_blank">https://jquery.com/</a></td>
+                        </tr>
+                        <tr>
+                            <td>HTML, CSS</td>
+                            <td><a href="https://www.w3schools.com/html/default.asp" target="_blank">Tutorials</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card bg-dark">
+        <div class="card-header" id="headingTwo">
+            <h2 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    Source Control, Database, Hosting and Domain Provider
+                </button>
+            </h2>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+            <div class="card-body">
+                <table class="table">
+                    <tbody class="font-weight-light">
+                        <tr>
+                            <td>Microsoft Azure DevOps</td>
+                            <td><a href="https://azure.microsoft.com/en-in/services/devops/" target="_blank">https://azure.microsoft.com/en-in/services/devops/</a></td>
+                        </tr>
+                        <tr>
+                            <td>Microsoft Azure SQL Database</td>
+                            <td><a href="https://azure.microsoft.com/en-in/services/sql-database/" target="_blank">https://azure.microsoft.com/en-in/services/sql-database/</a></td>
+                        </tr>
+                        <tr>
+                            <td>Microsoft Azure Cloud Hosting</td>
+                            <td><a href="https://azure.microsoft.com/en-in/" target="_blank">https://azure.microsoft.com/en-in/</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card bg-dark">
+        <div class="card-header" id="headingThree">
+            <h2 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                    Login with Facebook
+                </button>
+            </h2>
+        </div>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionExample">
+            <div class="card-body">
+                <table class="table">
+                    <tbody class="font-weight-light">
+                        <tr>
+                            <td>Facebook for Developers</td>
+                            <td><a href="https://developers.facebook.com/" target="_blank">https://developers.facebook.com/</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="card bg-dark">
+        <div class="card-header" id="headingFour">
+            <h2 class="mb-0">
+                <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                    Content Provider
+                </button>
+            </h2>
+        </div>
+        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordionExample">
+            <div class="card-body">
+                <table class="table">
+                    <tbody class="font-weight-light">
+                        <tr>
+                            <td>Marvel Developer Portal</td>
+                            <td><a href="https://developer.marvel.com" target="_blank">https://developer.marvel.com</a></td>
+                        </tr>
+                        <tr>
+                            <td>SuperHero API</td>
+                            <td><a href="https://superheroapi.com" target="_blank">https://superheroapi.com</a></td>
+                        </tr>
+                        <tr>
+                            <td>Superhero Database</td>
+                            <td><a href="https://www.superherodb.com" target="_blank">https://www.superherodb.com</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <hr />
+
+    <p>
+        <small>
+            <b>Disclaimer:</b>
+            This website is designed and developed primarily for learning and fun purposes with no commercial intentions. I haven't considered any data privacy infringement and/or about any laws applicable for websites or software or breaking for those. Also, I intend no copyright Infringement of Superhero APIs/Database, Marvel, DC Comics, whatsoever. The respected data might be copyright and/or belong to their respective owner. But I reserve all rights of my website/software and respective designs, ideas, and code.
+        </small>
+    </p>
+</div>

@@ -1,0 +1,25 @@
+﻿@model IEnumerable<JacksMarvel.Models.ComicCharacter>
+
+@{
+    ViewBag.Title = "Favourite Characters";
+}
+
+<h2>My Favourite Characters (@Model.Count()) </h2>
+
+<text>&nbsp;</text>
+@if (Model != null && Model.Count() > 0)
+{
+    <div class="row">
+        @Html.Partial("_LoadCharactersThumbnails", Model)
+    </div>
+}
+else
+{
+    <h6 class="h6 font-weight-lighter">
+        You haven't added any character in your favourite list. Please explore all the characters and start adding.
+    </h6>
+    <h6 class="h6 font-weight-lighter">
+        @Html.ActionLink("All Characters »", "AllCharacters", "ComicHeros", null, new { @class = "nav-link" })
+    </h6>
+
+}

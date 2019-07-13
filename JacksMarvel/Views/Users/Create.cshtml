@@ -1,0 +1,80 @@
+﻿@model JacksMarvel.Models.tblUser
+
+@{
+    ViewBag.Title = "Register";
+}
+
+<h1 class="h1 font-weight-lighter">Register to explore the biggest comic universe!</h1>
+<div class="row">
+    <div class="col-md-8">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.Hidden("UseRemoteAttribute", true)
+
+            <div class="form-horizontal">
+                <h4>Create a new account</h4>
+                <hr />
+                @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.EmailAddress, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.EmailAddress, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(model => model.ConfirmPassword, htmlAttributes: new { @class = "control-label col-md-4" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ConfirmPassword, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Register" class="btn btn-primary" />
+                        <input type="reset" value="Reset" class="btn btn-secondary ml-2" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="col-md-4">
+        <section id="loginWithFB">
+            <h4>Or Log in with Facebook</h4>
+            <div class="fb-login-button" data-size="large" data-button-type="continue_with" data-auto-logout-link="false" data-use-continue-as="true" data-onlogin="checkLoginState()"></div>
+        </section>
+    </div>
+</div>
+
+&nbsp;
+<hr />
+
+<!-- Loving Deadpool img -->
+<h2 class="h2 font-weight-lighter text-secondary text-center" style="font-size: 3.0vw;">JUSTICE LEAGUE: "होय! आपला रजीस्ट्रेशॅनचा ​​निर्णय बरोबर आहे. हेच न्याय आहे..."</h2>
+
+<img src="../Images/Wallpapers/JusticeLeagueShaded.jpg" class="rounded-circle mx-auto img-fluid d-block" alt="...">
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

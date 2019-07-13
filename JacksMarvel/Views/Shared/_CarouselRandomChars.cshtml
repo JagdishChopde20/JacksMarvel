@@ -1,0 +1,21 @@
+﻿@model IEnumerable<JacksMarvel.Models.ComicCharacter>
+
+<table>
+    <tr>
+        @foreach (var item in Model.Take(4))
+        {
+            if (item != null && item.image != null && item.image.url != null)
+            {
+                <td>
+                    <a href="@Url.Action("CharacterDetails","ComicHeros",new { charId = item.id })" style="text-decoration:none">
+                        <img src="@item.image.url" class="img-fluid">
+                    </a>
+                </td>
+            }
+            else
+            {
+                <td><img src="https://www.superherodb.com/pictures2/portraits/10/100/10431.jpg" class="img-fluid"></td>
+            }
+        }
+    </tr>
+</table>

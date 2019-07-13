@@ -1,0 +1,58 @@
+﻿@model IEnumerable<JacksMarvel.Models.tblUser>
+
+@{
+    ViewBag.Title = "Admin";
+}
+
+<h2>All Users (Admin)</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Username)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Password)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EmailAddress)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AccountCreationDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastLoginDateTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LoginCount)
+        </th>
+        <th>Actions</th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Username)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Password)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EmailAddress)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AccountCreationDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastLoginDateTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LoginCount)
+        </td>
+        <td>
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+        </td>
+    </tr>
+}
+
+</table>

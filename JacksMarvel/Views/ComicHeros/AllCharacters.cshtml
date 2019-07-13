@@ -1,0 +1,80 @@
+﻿@model IEnumerable<JacksMarvel.Models.ComicCharacter>
+
+@{
+    ViewBag.Title = "All Characters";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(function () {
+            var loadCount = 1;
+            var itemsToLoad = 12;
+            var loading = $("#loading");
+            $("#loadMore").on("click", function (e) {
+
+                e.preventDefault();
+
+                $(document).on({
+
+                    ajaxStart: function () {
+                        loading.show();
+                    },
+                    ajaxStop: function () {
+                        loading.hide();
+                    }
+                });
+
+                var url = "/ComicHeros/LoadMoreCharacters/";
+                $.ajax({
+                    url: url,
+                    data: { offset: loadCount * itemsToLoad, size: itemsToLoad },
+                    cache: false,
+                    type: "POST",
+                    success: function (data) {
+                        console.log("data length: " + data.length);
+                        if (data.length !== 0) {
+                            $(data.ModelString).insertBefore("#loadMore").hide().fadeIn(2000);
+                        }
+
+                        var ajaxModelCount = data.ModelCount - (loadCount * itemsToLoad);
+                        if (ajaxModelCount <= 0) {
+                            $("#loadMore").hide().fadeOut(2000);
+                            $("#txtThatsAll").css("visibility", "visible");
+                        }
+                        else {
+                            var offset = (loadCount * itemsToLoad);
+                            var charsFetchLimit = ((offset + itemsToLoad) > data.ModelCount) ? (data.ModelCount - offset) : itemsToLoad;
+
+                            $("#txtLoadMore").text("Load More " + charsFetchLimit + " » (" + offset + " out of " + data.ModelCount + " loaded)  ");
+                        }
+                        console.log(data.ModelCount);
+                        console.log(ajaxModelCount);
+                    },
+                    error: function (xhr, status, error) {
+                        console.log(xhr.responseText);
+                        console.log("message : \n" +
+                            "An error occurred, for more info check the js console" +
+                            "\n status : \n" + status + " \n error : \n" + error);
+                        alert("An error occurred, please reload the page and try again.");
+                    }
+                });
+
+                loadCount = loadCount + 1;
+            });
+        });
+    });
+</script>
+
+<h2>All Characters</h2>
+<hr />
+<div class="row">
+    @Html.Partial("_LoadCharactersThumbnails", Model)
+
+    <a id="loadMore" class="btn btn-primary btn-lg btn-block">
+        <span id="txtLoadMore">Load More »</span>
+        <span>
+            <img id="loading" style="display: none;" src="~/Content/ajax-loader.gif" height="30" />
+        </span>
+    </a>
+</div>
+<h2 id="txtThatsAll" class="display-4" style="visibility:hidden">That's all folk. What more you want?</h2>

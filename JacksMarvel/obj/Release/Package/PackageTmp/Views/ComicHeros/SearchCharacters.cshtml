@@ -1,0 +1,61 @@
+﻿@model JacksMarvel.Models.ComicSearchResult
+
+@{
+    ViewBag.Title = "Search Characters";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+        $('#inlineFormInput_SearchTerm').autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/ComicHeros/GetCharacterNameList",
+                    type: "POST",
+                    dataType: "json",
+                    data: { queryTerm: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.CharacterName };/*, value: item.Id*/
+                        }))
+                    }
+                })
+            },
+            minLength: 3,
+            messages: {
+                noResults: "",
+                results: function (count) {
+                    return count + (count > 1 ? ' results' : ' result ') + ' found';
+                }
+            }
+        });
+    });
+</script>
+
+<h2>Search Characters</h2>
+
+<form method="post">
+    <div class="form-row">
+        <div class="col-8 col-md-10">
+            <label class="sr-only" for="inlineFormInput_SearchTerm">Name</label>
+            <input type="text" class="form-control mb-3 mr-3" id="inlineFormInput_SearchTerm" name="searchTerm" placeholder="Search any character" style="max-width:100%" required>
+        </div>
+        <div class="col">
+            <button type="submit" class="btn btn-primary mb-3" style="width:100%"><i class="fa fa-search"></i> Search</button>
+        </div>
+    </div>
+</form>
+
+
+@if (Model != null && Model.results != null && Model.results.Count() > 0)
+{
+    <h2 class="font-weight-lighter" style="font-size: 3.5vw;">Showing @Model.results.Count() search results for "@Model.results_for" </h2>
+    <div class="row">
+        @Html.Partial("_LoadCharactersThumbnails", Model.results)
+    </div>
+}
+
+@if (Model != null && Model.response != null && Model.response == "error")
+{
+    <h2 class="font-weight-lighter" style="font-size: 3.5vw;"> No results found matching your query. </h2>
+}

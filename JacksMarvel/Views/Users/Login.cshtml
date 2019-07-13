@@ -1,0 +1,143 @@
+﻿@model JacksMarvel.Models.tblUser
+
+@{
+    ViewBag.Title = "Login";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#formLogin").on('submit', function () {
+            if ($("#formLogin").valid()) {
+                // here write code to show loading image.
+                $('#spinnerLogin').css('display', 'inline-block')
+            }
+        });
+    });
+</script>
+
+<h1 class="h1 font-weight-lighter">First of all, log in to explore the biggest comic universe!</h1>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <section id="loginForm">
+            @using (Html.BeginForm("Login", "Users", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post , new { id = "formLogin" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="form-horizontal">
+                    <h4>Log in</h4>
+                    <hr />
+                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Username, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.PasswordFor(model => model.Password, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-check">
+                        <div class="col-md-10">
+                            @Html.CheckBoxFor(model => model.IsRememberMe, new { @class = "form-check-input" })
+                            @Html.LabelFor(model => model.IsRememberMe, htmlAttributes: new { @class = "form-check-label" })
+                        </div>
+                    </div>
+                    &nbsp;
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Log in" class="btn btn-success mb-3 mr-2" />
+                            <div id="spinnerLogin" class="spinner-border text-warning" role="status" style="display:none">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        </section>
+    </div>
+    <div class="col-md-4">
+        <section id="loginWithFB">
+            <h4>Or Log in with Facebook</h4>
+            <div class="fb-login-button" data-size="large" data-button-type="continue_with" data-auto-logout-link="false" data-use-continue-as="true" data-onlogin="checkLoginState()"></div>
+        </section>
+        &nbsp;<hr />
+        <section id="registerForm">
+            <h4>Don't have an account? Don't worry! Create one here for free</h4>
+            @Html.ActionLink("Register", "Create", null, new { @class = "btn btn-primary" })
+        </section>
+    </div>
+</div>
+
+&nbsp;
+<hr />
+
+<!-- Loving Deadpool img -->
+<h2 class="h2 font-weight-lighter text-secondary text-center" style="font-size: 20px; font-size: 3.0vw;">DEADPOOL: "लॉग इन करा, प्रेमाणे सांगतोय..."</h2>
+
+<img src="../Images/Wallpapers/LovingDeadpoolWide.jpg" class="rounded-circle mx-auto img-fluid d-none d-md-block" alt="...">
+<img src="../Images/Wallpapers/LovingDeadpool.jpg" class="rounded-circle mx-auto img-fluid d-md-none" alt="...">
+
+
+@if (TempData["RegistrationSuccessful"] != null)
+{
+    @:<script>$(document).ready(function () { $('#RegistrationSuccessfulModal').modal('show') });</script>
+}
+
+<!-- Registration Successful Modal -->
+<div class="modal fade" id="RegistrationSuccessfulModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="color:black">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Registration Successful!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Please log in with your credentials to continue.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (TempData["AccountDeletionSuccessful"] != null)
+{
+    @:<script>$(document).ready(function () { $('#AccountDeletionSuccessfulModal').modal('show') });</script>
+}
+
+<!-- Account Deletion Successful Modal -->
+<div class="modal fade" id="AccountDeletionSuccessfulModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="color:black">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Account Deletion Successful!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Your Account has been deleted permenently.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

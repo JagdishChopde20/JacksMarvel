@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2ee0fc1086bf4bfd827b07e8d1e0f3a0" Name="Diagram1">
+        <EntityTypeShape EntityType="Models.tblUser" Width="2.25" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Models.tblAllComicCharacter" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="Models.tblUserFavouriteCharacter" Width="1.5" PointX="3.375" PointY="3.75" />
+        <EntityTypeShape EntityType="Models.FeedbackEntry" Width="1.5" PointX="5.375" PointY="0.75" />
+        <EntityTypeShape EntityType="Models.tblFeedbackEntry" Width="1.5" PointX="5.375" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

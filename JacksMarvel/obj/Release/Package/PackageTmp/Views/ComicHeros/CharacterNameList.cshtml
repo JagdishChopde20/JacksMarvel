@@ -1,0 +1,97 @@
+﻿@model IEnumerable<JacksMarvel.Models.tblAllComicCharacter>
+
+@{
+    ViewBag.Title = "Character Name List";
+}
+
+<h2>Character Name List</h2>
+<p>Click on character name to see the details.</p>
+<div class="row">
+    <div class="col-md-4">
+        <table class="table table-hover table-dark">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Id)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CharacterName)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Take(244))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            <a href="@Url.Action("CharacterDetails","ComicHeros",new { charId = item.Id })">
+                                @Html.DisplayFor(modelItem => item.CharacterName)
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-4">
+        <table class="table table-hover table-dark">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Id)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CharacterName)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Skip(244).Take(244))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            <a href="@Url.Action("CharacterDetails","ComicHeros",new { charId = item.Id })">
+                                @Html.DisplayFor(modelItem => item.CharacterName)
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="col-md-4">
+        <table class="table table-hover table-dark">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Id)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.CharacterName)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Skip(488).Take(243))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Id)
+                        </td>
+                        <td>
+                            <a href="@Url.Action("CharacterDetails","ComicHeros",new { charId = item.Id })">
+                                @Html.DisplayFor(modelItem => item.CharacterName)
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

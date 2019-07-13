@@ -1,0 +1,182 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Jura|Raleway" rel="stylesheet">
+    <link rel="icon" href="@Url.Content("~/favicon.ico")" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+    @*<link href="https://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="Stylesheet" />
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>*@
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/jquery/ui")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/tooltip.js"></script>
+
+    <script src="~/Scripts/MyLoginWithFacebookHelper.js"></script>
+    <script type="text/javascript">
+        // Redirection method post succeful login with Facebook. (need to keep this method on view as Url.Action method does not render on javasacript file)
+        function LoginRedirection(userName, emailAddress) {
+            var url = '@Url.Action("LoginWithFacebook", "Users", new { userName = "__id__", emailAddress = "__email__" })';
+            var finalUrl = url.replace('__id__', userName);
+            finalUrl = finalUrl.replace('__email__', emailAddress);
+            finalUrl = finalUrl.replace('&amp;', '&');
+            window.location.href = finalUrl;
+        }
+
+        // When the user scrolls down 20px from the top of the document, show the button
+        window.onscroll = function () { scrollFunction() };
+
+        function scrollFunction() {
+            if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+                document.getElementById("BtnGoToTop").style.display = "block";
+            } else {
+                document.getElementById("BtnGoToTop").style.display = "none";
+            }
+        }
+
+        // When the user clicks on the button, scroll to the top of the document
+        function topFunction() {
+            document.body.scrollTop = 0; // For Safari
+            document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+        }
+
+    $(document).ready(function () {
+        // Enable bootstrap tooltip throughout the app
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $('#searchQuery').autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/ComicHeros/GetCharacterNameList",
+                    type: "POST",
+                    dataType: "json",
+                    data: { queryTerm: request.term },
+                    success: function (data) {
+                        response($.map(data, function (item) {
+                            return { label: item.CharacterName };/*, value: item.Id*/
+                        }))
+                    }
+                })
+            },
+            minLength: 3,
+            messages: {
+                noResults: "",
+                results: function (count) {
+                    return count + (count > 1 ? ' results' : ' result ') + ' found';
+                }
+            }
+        });
+    });
+
+    </script>
+    <style type="text/css">
+    body { font-family: 'Raleway', sans-serif; background-image: url(../Images/Wallpapers/BlueTextureFull.jpg); background-repeat: repeat-y; background-size: auto; }
+    </style>
+</head>
+<body style="background-color:darkslategray; color:white">
+    <div id="fb-root"></div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand rounded" href="@Url.Action("Index", "Home")" style="background-color:rgb(48,59,164)">
+                &nbsp;
+                <img src="../Images/SuperJ_logo.jpg" width="30" height="30" class="d-inline-block align-top img-fluid rounded mt-1" alt="">
+                <span style="color:white; font-family: 'Jura', sans-serif; text-shadow: 2px 2px 4px #000000;">Jack's Marvel</span>&nbsp;&nbsp;
+            </a>
+            @*<i class="fab fa-monero navbar-brand"></i>
+        @Html.ActionLink("Jack's Marvel", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">@Html.ActionLink("Home", "Index", "Home", null, new { @class = "nav-link" })</li>
+                    <li>
+                        <div id="dropdownChars" class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown_AllChars" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Characters
+                            </a>
+                            <div class="dropdown-menu bg-dark text-primary" aria-labelledby="navbarDropdown_AllChars">
+                                @Html.ActionLink("All Characters", "AllCharacters", "ComicHeros", null, new { @class = "dropdown-item text-primary" })
+                                @Html.ActionLink("Character Name List", "CharacterNameList", "ComicHeros", null, new { @class = "dropdown-item text-primary" })
+                                @Html.ActionLink("Search", "SearchCharacters", "ComicHeros", null, new { @class = "dropdown-item text-primary" })
+                            </div>
+                        </div>
+                    </li>
+                    <li>@Html.ActionLink("Contact/Feedback", "Contact", "Home", null, new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("About", "About", "Home", null, new { @class = "nav-link" })</li>
+
+                </ul>
+
+                <div class="nav-item d-lg-none">
+                    @Html.ActionLink("Search", "SearchCharacters", "ComicHeros", null, new { @class = "nav-link" })
+                </div>
+                <form class="form-inline d-none d-lg-inline-block my-2 my-lg-0" method="post" action="@Url.Action("SearchCharacters", "ComicHeros")">
+                    <input id="searchQuery" name="searchTerm" class="form-control mr-2" type="search" placeholder="Search Character" aria-label="Search" required />
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit"><i class="fa fa-search"></i> Search</button>
+                </form>
+                @if (User.Identity.Name != "")
+                {
+                    <div id="dropdownUser" class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @User.Identity.Name
+                            <i class="fas fa-user-circle"></i>
+                        </a>
+                        <div class="dropdown-menu bg-dark text-primary" aria-labelledby="navbarDropdown">
+                            @Html.ActionLink("My Favourites", "UserFavouriteCharacters", "ComicHeros", null, new { @class = "dropdown-item text-primary" })
+                            @Html.ActionLink("My Account", "Details", "Users", new { userName = User.Identity.Name }, new { @class = "dropdown-item text-primary" })
+                            @if (User.Identity.Name == "Jack")
+                            {
+                                <div class="dropdown-divider"></div>
+                                @Html.ActionLink("All Users (Admin)", "Index", "Users", new { userName = User.Identity.Name }, new { @class = "dropdown-item text-primary" })
+                                @Html.ActionLink("Feedback Entries (Admin)", "FeedbackEntries", "Users", null, new { @class = "dropdown-item text-primary" })
+                            }
+                            <div class="dropdown-divider"></div>
+                            @Html.ActionLink("Log out", "Logout", "Users", null, new { @class = "dropdown-item text-primary" })
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div>@Html.ActionLink("Register", "Create", "Users", null, new { @class = "nav-link" })</div>
+                    <div>@Html.ActionLink("Login", "Login", "Users", null, new { @class = "nav-link" })</div>
+                }
+            </div>
+        </div>
+    </nav>
+    <div class="container body-content">
+        &nbsp;
+        @RenderBody()
+        <hr/>
+        <footer>
+            <div class="d-flex mb-2">
+                <button type="button" class="btn btn-link ml-auto" onclick="topFunction()" id="BtnGoToTop" title="Go to top" style="display:none">Go to Top  <i class="fas fa-arrow-up"></i></button>
+            </div>
+            <div>
+                <div class="fb-like"
+                     data-share="true"
+                     data-width="450"
+                     data-show-faces="true">
+                </div>
+
+                <span class="float-right small text-secondary">
+                    &copy; @DateTime.Now.Year - Jack's Marvel (By Jagdish Chopde)
+                </span>
+            </div>
+        </footer>
+    </div>
+
+</body>
+</html>

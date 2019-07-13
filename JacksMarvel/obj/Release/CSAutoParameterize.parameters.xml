@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="JacksMarvel_dbEntities-Web.config Connection String" description="JacksMarvel_dbEntities Connection String used in web.config by the application to access the database." defaultValue="metadata=res://*/Models.JackMarvelDBDataModel.csdl|res://*/Models.JackMarvelDBDataModel.ssdl|res://*/Models.JackMarvelDBDataModel.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=jacksmarveldbserver.database.windows.net;initial catalog=JacksMarvel_db;persist security info=True;user id=Jagdish;password=jack@Marvel123;MultipleActiveResultSets=True;App=EntityFramework&quot;" tags="SqlConnectionString">
+    <parameterEntry kind="XmlFile" scope="F:\\myProjects\\JacksMarvel\\JacksMarvel\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='JacksMarvel_dbEntities']/@connectionString" />
+  </parameter>
+</parameters>

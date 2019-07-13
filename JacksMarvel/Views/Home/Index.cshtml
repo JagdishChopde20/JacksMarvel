@@ -1,0 +1,642 @@
+﻿@model IEnumerable<JacksMarvel.Models.ComicCharacter>
+@{
+    ViewBag.Title = "Jacks Marvel - Home";
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        // Asyncronously load the Carousel items
+        var loadCount = 1;
+        var itemsToLoad = 4;
+        var loading = $("#loadingGIF_Carousel");
+
+        $('#carouselRandomCharsSlidesOnly').on('slide.bs.carousel', function (e) {
+            // alert("next carousel item loading...\n From: " + e.from + " To: " + e.to);
+
+            $(document).on({
+
+                ajaxStart: function () {
+                    loading.show();
+                },
+                ajaxStop: function () {
+                    loading.hide();
+                }
+            });
+
+            var url = "/Home/LoadNextRandomCharactersToCarousel/";
+            $.ajax({
+                url: url,
+                data: { offset: loadCount * itemsToLoad, size: itemsToLoad },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    if (data.ModelString !== "") {
+                        $("#carouselItem" + e.to).html(data.ModelString);
+                    }
+
+                    var ajaxModelCount = data.ModelCount - (loadCount * itemsToLoad);
+                    if (ajaxModelCount < itemsToLoad) {
+                        loadCount = 0;
+                    }
+                    else {
+                        var offset = (loadCount * itemsToLoad);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    //console.log(xhr.responseText);
+                    console.log("message : \n" +
+                        "An error occurred, for more info check the js console" +
+                        "\n status : \n" + status + " \n error : \n" + error);
+                    //alert("An error occurred, please reload the page and try again.");
+                }
+            });
+
+            loadCount = loadCount + 1;
+        });
+
+        // Asyncronously load the Favourite Thumbnail items
+        var loadCount1 = 3;
+        var itemsToLoad1 = 1;
+        var loading1 = $("#loadingGIF_Thumbnail");
+
+        function LoadNextThumbnail() {
+            // alert("next carousel item loading1...\n From: " + e.from + " To: " + e.to);
+
+            var url = "/Home/LoadMoreFavouriteCharacters/";
+            $.ajax({
+                url: url,
+                data: { offset: loadCount1 * itemsToLoad1, size: itemsToLoad1 },
+                cache: false,
+                type: "POST",
+                success: function (data) {
+                    if (data.length !== 0) {
+                        $(data.ModelString).insertBefore("#loadingDiv").hide().fadeIn(2000);
+                    }
+
+                    var ajaxModelCount = data.ModelCount - (loadCount1 * itemsToLoad1);
+                    if (ajaxModelCount <= 1) {
+                        $(loading1).hide().fadeOut(2000);
+                    }
+                    else {
+                        var offset = (loadCount * itemsToLoad);
+                        var charsFetchLimit = ((offset + itemsToLoad) > data.ModelCount) ? (data.ModelCount - offset) : itemsToLoad;
+                        LoadNextThumbnail();
+                        //$("#txtLoadMore").text("Load More " + charsFetchLimit + " » (" + offset + " out of " + data.ModelCount + " loaded)  ");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    //console.log(xhr.responseText);
+                    console.log("message : \n" +
+                        "An error occurred, for more info check the js console" +
+                        "\n status : \n" + status + " \n error : \n" + error);
+                    //alert("An error occurred, please reload the page and try again.");
+                }
+            });
+            loadCount1 = loadCount1 + 1;
+        }
+
+        LoadNextThumbnail();
+    });
+
+</script>
+<div class="card bg-dark text-white">
+    <img src="../Images/JusticeLeagueStripe.jpg" class="card-img" alt="...">
+    <div class="card-img-overlay h-100 d-flex flex-column justify-content-end">
+        <div class="card text-light" style="opacity:0.7; background-color:black">
+            <div class="card-body">
+                <h1 class="card-title font-weight-lighter text-center align-text-bottom" style="font-size: 30px; font-size: 3.5vw; text-shadow: 1px 1px 2px #FFFFFF;">Get all marvellous Super Heroes and Villians from all universes</h1>
+            </div>
+        </div>
+    </div>
+</div>
+        &nbsp;
+<h2 class="font-weight-lighter text-center d-block d-md-none" style="font-size: 3.5vw;">Powerstats. Biography. Appearance. Work. Connections. Images. </h2>
+<div id="carouselRandomCharsSlidesOnly" class="carousel slide" data-ride="carousel">
+    <div class="carousel-inner">
+        <div id="carouselItem0" class="carousel-item active">
+            @Html.Partial("_CarouselRandomChars", Model.Take(4))
+        </div>
+        <div id="carouselItem1" class="carousel-item">
+            @Html.Partial("_CarouselRandomChars", Model.Take(4))
+        </div>
+        <div class="carousel-caption d-none d-md-block">
+            <img id="loadingGIF_Carousel" style="display:none" src="~/Content/ajax-loader.gif" height="100" />
+            <div class="card text-light" style="opacity:0.7; background-color:black">
+                <div class="card-body">
+                    <h2 class="font-weight-lighter text-center" style="text-shadow: 2px 2px 4px #808080;">Powerstats. Biography. Appearance. Work. Connections. Images. </h2>
+                </div>
+            </div>
+        </div>
+        <a class="carousel-control-prev" href="#carouselRandomCharsSlidesOnly" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselRandomCharsSlidesOnly" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+</div>
+
+&nbsp;
+<h1 class="font-weight-lighter" style="font-size: 3.5vw;">Compare power statistics of some all-time favourite characters</h1>
+
+<div class="row">
+    <div class="col-12 col-md-3">
+        <a href="@Url.Action("CharacterDetails","ComicHeros",new { charId = "644" })" style="text-decoration:none">
+            <div class="card text-white bg-dark">
+                <div class="row">
+                    <div class="col-6 col-md-12">
+                        <img src="../Images/Heros/DarkSuperman.jpg" class="card-img-top" alt="...">
+                    </div>
+                    <div class="col-6 col-md-12">
+                        <div class="card-body text-white bg-dark">
+                            <h5 class="card-title font-weight-normal">SUPERMAN</h5>
+                            <div>
+                                <span class="small text-secondary">Intelligence: 94</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 94%" aria-valuenow="94" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Strength: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Speed: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Durability: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Power: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Combat: 85</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Height: 6'3 ft | Weight: 101 kg </small>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-12 col-md-3 mt-3  mt-md-0">
+        <a href="@Url.Action("CharacterDetails","ComicHeros",new { charId = "70" })" style="text-decoration:none">
+            <div class="card text-white bg-dark">
+                <div class="row">
+                    <div class="col-6 col-md-12">
+                        <img src="../Images/Heros/Batman.jpg" class="card-img-top" alt="...">
+                    </div>
+                    <div class="col-6 col-md-12">
+                        <div class="card-body">
+                            <h5 class="card-title font-weight-normal">BATMAN</h5>
+                            <div>
+                                <span class="small text-secondary">Intelligence: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Strength: 26</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 26%" aria-valuenow="26" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Speed: 27</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 27%" aria-valuenow="27" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Durability: 50</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Power: 47</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 47%" aria-valuenow="47" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Combat: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Height: 6'2 ft | Weight: 95 kg </small>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-12 col-md-3 mt-3  mt-md-0">
+        <a href="@Url.Action("CharacterDetails","ComicHeros",new { charId = "720" })" style="text-decoration:none">
+            <div class="card text-white bg-dark">
+                <div class="row">
+                    <div class="col-6 col-md-12">
+                        <img src="../Images/Heros/Wonder-woman.jpg" class="card-img-top" alt="...">
+                    </div>
+                    <div class="col-6 col-md-12">
+                        <div class="card-body">
+                            <h5 class="card-title font-weight-normal">WONDER-WOMAN</h5>
+                            <div>
+                                <span class="small text-secondary">Intelligence: 88</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 88%" aria-valuenow="88" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Strength: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Speed: 79</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 79%" aria-valuenow="79" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Durability: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Power: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Combat: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Height: 6'0 ft | Weight: 74 kg </small>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-12 col-md-3 mt-3  mt-md-0">
+        <a href="@Url.Action("CharacterDetails","ComicHeros",new { charId = "659" })" style="text-decoration:none">
+            <div class="card text-white bg-dark">
+                <div class="row">
+                    <div class="col-6 col-md-12">
+                        <img src="../Images/Heros/Thor.jpg" class="card-img-top" alt="...">
+                    </div>
+                    <div class="col-6 col-md-12">
+                        <div class="card-body">
+                            <h5 class="card-title font-weight-normal">THOR</h5>
+                            <div>
+                                <span class="small text-secondary">Intelligence: 69</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 69%" aria-valuenow="69" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Strength: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Speed: 83</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 83%" aria-valuenow="83" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Durability: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Power: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Combat: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Height: 6'6 ft | Weight: 288 kg </small>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-12 col-md-3 mt-3">
+        <a href="@Url.Action("CharacterDetails","ComicHeros",new { charId = "655" })" style="text-decoration:none">
+            <div class="card text-white bg-dark">
+                <div class="row">
+                    <div class="col-6 col-md-12">
+                        <img src="../Images/Heros/Thanos.jpg" class="card-img-top" alt="...">
+                    </div>
+                    <div class="col-6 col-md-12">
+                        <div class="card-body">
+                            <h5 class="card-title font-weight-normal">THANOS</h5>
+                            <div>
+                                <span class="small text-secondary">Intelligence: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Strength: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Speed: 33</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 33%" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Durability: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Power: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Combat: 80</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Height: 6'7 ft | Weight: 443 kg </small>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-12 col-md-3 mt-3">
+        <a href="@Url.Action("CharacterDetails","ComicHeros",new { charId = "620" })" style="text-decoration:none">
+            <div class="card text-white bg-dark">
+                <div class="row">
+                    <div class="col-6 col-md-12">
+                        <img src="../Images/Heros/Spiderman.jpg" class="card-img-top" alt="...">
+                    </div>
+                    <div class="col-6 col-md-12">
+                        <div class="card-body">
+                            <h5 class="card-title font-weight-normal">SPIDER-MAN</h5>
+                            <div>
+                                <span class="small text-secondary">Intelligence: 90</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 90%" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Strength: 55</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Speed: 67</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 67%" aria-valuenow="67" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Durability: 75</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Power: 74</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 74%" aria-valuenow="74" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Combat: 85</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Height: 5'10 ft | Weight: 74 kg </small>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-12 col-md-3 mt-3">
+        <a href="@Url.Action("CharacterDetails","ComicHeros",new { charId = "346" })" style="text-decoration:none">
+            <div class="card text-white bg-dark">
+                <div class="row">
+                    <div class="col-6 col-md-12">
+                        <img src="../Images/Heros/IronMan.jpg" class="card-img-top" alt="...">
+                    </div>
+                    <div class="col-6 col-md-12">
+                        <div class="card-body">
+                            <h5 class="card-title font-weight-normal">IRON-MAN</h5>
+                            <div>
+                                <span class="small text-secondary">Intelligence: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Strength: 85</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Speed: 58</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 58%" aria-valuenow="58" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Durability: 85</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Power: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Combat: 64</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 64%" aria-valuenow="64" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Height: 6'6 ft | Weight: 191 kg </small>
+                </div>
+            </div>
+        </a>
+    </div>
+    <div class="col-12 col-md-3 mt-3">
+        <a href="@Url.Action("CharacterDetails","ComicHeros",new { charId = "213" })" style="text-decoration:none">
+            <div class="card text-white bg-dark">
+                <div class="row">
+                    <div class="col-6 col-md-12">
+                        <img src="../Images/Heros/Deadpool.jpg" class="card-img-top" alt="...">
+                    </div>
+                    <div class="col-6 col-md-12">
+                        <div class="card-body">
+                            <h5 class="card-title font-weight-normal">DEADPOOL</h5>
+                            <div>
+                                <span class="small text-secondary">Intelligence: 69</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: 69%" aria-valuenow="69" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Strength: 32</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 32%" aria-valuenow="32" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Speed: 50</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Durability: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Power: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+
+                                <span class="small text-secondary">Combat: 100</span>
+                                <div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <small class="text-muted">Height: 6'2 ft | Weight: 95 kg </small>
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+&nbsp;
+<div class="card bg-dark text-light border-warning d-none d-md-block">
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <h2 class="card-title font-weight-lighter">Also checkout mobile version</h2>
+                <hr />
+                <p class="card-text">You are browsing on large screen now. Do also check out our mobile version too on your mobile browser with same url.</p>
+            </div>
+            <div class="col">
+                <img src="../Images/AppScreenshots/HomeScreenshot1.jpg" class="card-img-top img-fluid" style="border:dashed; border-color:darkgray" alt="...">
+            </div>
+            <div class="col">
+                <img src="../Images/AppScreenshots/HomeScreenshot2.jpg" class="card-img-top img-fluid" style="border:dashed; border-color:darkgray" alt="...">
+            </div>
+            <div class="col">
+                <img src="../Images/AppScreenshots/HomeScreenshot3.jpg" class="card-img-top img-fluid" style="border:dashed; border-color:darkgray" alt="...">
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="card bg-dark text-light border-warning d-md-none">
+    <div class="card-header">
+        <h3 class="card-title font-weight-lighter">Also checkout desktop / tablet version</h3>
+        <hr />
+        <p class="card-text">You are browsing on mobile screen now. Do also check out our desktop / tablet version too on your large screen devices with same url.</p>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <img src="../Images/AppScreenshots/HomeScreenshotPC1.jpg" class="card-img-bottom img-fluid" style="border:dashed; border-color:darkgray" alt="...">&nbsp;
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <img src="../Images/AppScreenshots/HomeScreenshotPC2.jpg" class="card-img-bottom img-fluid" style="border:dashed; border-color:darkgray" alt="...">&nbsp;
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <img src="../Images/AppScreenshots/HomeScreenshotPC3.jpg" class="card-img-bottom img-fluid" style="border:dashed; border-color:darkgray" alt="...">&nbsp;
+            </div>
+        </div>
+    </div>
+</div>
+&nbsp;
+
+<h1 class="h1 font-weight-lighter">Few All Time Favourite Characters</h1>
+<div class="row">
+    @Html.Partial("_LoadCharactersThumbnails", Model)
+
+    <div id="loadingDiv" class="col-4 col-sm-4 col-md-4 col-lg-3 col-xl-2">
+        <img id="loadingGIF_Thumbnail" class="img-fluid align-middle" src="~/Content/ajax-loader.gif" />
+        &nbsp;
+    </div>
+</div>
+@if (User.Identity.Name != "")
+{
+    <h1 class="h1 font-weight-lighter">@Html.ActionLink("All Characters »", "AllCharacters", "ComicHeros", null, new { @class = "nav-link" })</h1>
+}
+else
+{
+    <h1 class="h1 font-weight-lighter">And many more, log in to explore the biggest comic universe!</h1>
+}
+
+
+@if (TempData["FeedbackEntrySuccessful"] != null)
+{
+    @:<script>$(document).ready(function () { $('#FeedbackEntrySuccessfulModal').modal('show') });</script>
+}
+
+<!-- Contact/Feedback Inserted in DB Successful Modal -->
+<div class="modal fade" id="FeedbackEntrySuccessfulModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="color:black">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Feedback Entry Successful!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Your feedback has been noted successfully.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
