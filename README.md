@@ -1,0 +1,2 @@
+# JacksMarvel
+A Superhero website in ASP.Net MVC. Get all marvellous Comic Super Heroes and Villians from all universes. Explore Powerstats, Biography, Appearance, Work, Connections and Images of all your favourite characters. In addition, the website provides functionalities like user management, favourites, login with Facebook, providing your feedback functionalities. Don't forget the like and share the website using the facebook like and share buttons provided on the bottom of the website. Enjoy!
